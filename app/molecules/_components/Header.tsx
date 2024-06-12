@@ -4,17 +4,18 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import Link from "next/link";
-import { Flame } from "lucide-react";
+import { AddCombo } from "@/app/atoms/_components/AddCombo";
 
 export const Header = () => {
   return (
     <header className="sticky top-0 py-4 backdrop-blur-sm backdrop-grayscale z-30">
       <Section className="flex items-center">
         <h1 className="text-md font-bold items-center gap-1 flex">
-          Combosss<span><Flame size={20} fill="yellow" stroke="none" className="-rotate-90"/></span>
+          Combosss<span><CustomIcon size={20} fill="yellow" stroke="none" name="flameLogo" className="-rotate-90"/></span>
           </h1>
         <div className="flex-1 text-center">
-        <Link
+          <AddCombo/>
+        {/* <Link
             href={"/"}
             className={cn(buttonVariants({ variant: "outline" }), "size-8 p-0")}
           >
@@ -23,7 +24,7 @@ export const Header = () => {
               name="addCombo"
               size={24}
             />
-          </Link>
+          </Link> */}
         </div>
         <ul className="flex items-center gap-2">
           <Link
