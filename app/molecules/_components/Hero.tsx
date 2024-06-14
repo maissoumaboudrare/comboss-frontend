@@ -1,3 +1,4 @@
+"use client"
 import { Section } from "@/app/atoms/_components/Section";
 import { Button } from "@/components/ui/button";
 

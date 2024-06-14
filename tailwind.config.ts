@@ -72,10 +72,15 @@ const config = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        "like": {
+          from: { backgroundPosition: "left" },
+          to: { backgroundPosition: "right" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "like": "like 0.8s steps(28)",
       },
     },
   },

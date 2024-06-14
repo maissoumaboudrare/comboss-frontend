@@ -35,4 +35,17 @@
     body {
       @apply bg-background text-foreground;
     }
+    .like {
+      animation: anime-like 0.8s steps(28);
+    }
+    
+    @keyframes anime-like {
+      from {
+        background-position: left;
+      }
+      to {
+        background-position: right;
+      }
+    }
   }
+

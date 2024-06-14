@@ -11,13 +11,13 @@ export function ComboPreview() {
   return (
     <ScrollArea className="h-24 w-full rounded-md border">
       <div className="p-4">
-        {tags.map((tag) => (
-          <>
-            <div key={tag} className="text-sm">
+        {tags.map((tag, index) => (
+          <div key={index}>
+            <div className="text-sm">
               {tag}
             </div>
             <Separator className="my-2" />
-          </>
+          </div>
         ))}
       </div>
     </ScrollArea>
