@@ -1,4 +1,7 @@
 "use client";
+
+import { useRouter } from "next/navigation";
+
 import { CustomIcon } from "@/app/atoms/_components/icons/CustomIcons";
 import { Button } from "@/components/ui/button";
 import {
@@ -22,35 +25,44 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import z from "zod";
+import { fetchAPI } from "@/lib/utils";
 
 const passwordValidation = new RegExp(
   /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
 );
 
-const SigninSchema = z.object({
-  pseudo: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }).max(10, {
-    message: "Username can't exceed 10 characters.",
-  }),
-  email: z.string().trim().min(1, "Email required !").email("Invalid email"),
-  password: z
-  .string()
-  .min(8, "Password requires at least 8 characters !")
-  .regex(passwordValidation, {
-    message: 'Password not valid! Add at least one uppercase letter, one lowercase letter, one number and one special character',
-  }),
-    
-    confirmPassword: z.string().min(8, "Password requires at least 8 characters !"),
-}).superRefine(({ confirmPassword, password }, ctx) => {
-  if (confirmPassword !== password) {
-    ctx.addIssue({
-      code: "custom",
-      message: "The passwords did not match",
-      path: ['confirmPassword']
-    });
-  }
-});
+const SigninSchema = z
+  .object({
+    pseudo: z
+      .string()
+      .min(2, {
+        message: "Username must be at least 2 characters.",
+      })
+      .max(10, {
+        message: "Username can't exceed 10 characters.",
+      }),
+    email: z.string().trim().min(1, "Email required !").email("Invalid email"),
+    password: z
+      .string()
+      .min(8, "Password requires at least 8 characters !")
+      .regex(passwordValidation, {
+        message:
+          "Password not valid! Add at least one uppercase letter, one lowercase letter, one number and one special character",
+      }),
+
+    confirmPassword: z
+      .string()
+      .min(8, "Password requires at least 8 characters !"),
+  })
+  .superRefine(({ confirmPassword, password }, ctx) => {
+    if (confirmPassword !== password) {
+      ctx.addIssue({
+        code: "custom",
+        message: "The passwords did not match",
+        path: ["confirmPassword"],
+      });
+    }
+  });
 
 type SigninValues = z.infer<typeof SigninSchema>;
 
@@ -59,13 +71,39 @@ const Signin = () => {
     resolver: zodResolver(SigninSchema),
     mode: "onSubmit",
     defaultValues: {
+      pseudo: "",
       email: "",
       password: "",
+      confirmPassword: "",
     },
   });
 
-  const handleSubmitSignin = (values: SigninValues) => {
-    console.log("Should sign in with values:", values);
+  const router = useRouter();
+
+  const handleSubmitSignin = async (values: SigninValues) => {
+    try {
+      await fetchAPI("/api/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          pseudo: values.pseudo,
+          email: values.email,
+          password: values.password,
+          isPremium: false,
+        }),
+      });
+
+      router.push("/login");
+    } catch (error) {
+      console.error("Error signing in:", error);
+    }
+  };
+
+  const handleRedirect = () => {
+    console.log("first");
+    
   };
 
   return (
@@ -79,14 +117,18 @@ const Signin = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
-          <FormField
+            <FormField
               control={form.control}
               name="pseudo"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Username</FormLabel>
                   <FormControl>
-                    <Input {...field} type="text" placeholder="mycombosssname" />
+                    <Input
+                      {...field}
+                      type="text"
+                      placeholder="mycombosssname"
+                    />
                   </FormControl>
                   <FormDescription />
                   <FormMessage />
@@ -141,7 +183,9 @@ const Signin = () => {
             />
           </CardContent>
           <CardFooter className="flex flex-col gap-8">
-            <Button className="w-full">Signin with Email</Button>
+            <Button type="submit" className="w-full">
+              Signin with Email
+            </Button>
             <div className="relative w-full">
               <div className="absolute inset-0 flex items-center">
                 <span className="w-full border-t"></span>
@@ -152,9 +196,9 @@ const Signin = () => {
                 </span>
               </div>
             </div>
-            <Button className="py-5 w-full gap-2" variant={"outline"}>
+            <Button className="py-5 w-full gap-2" variant={"outline"} onClick={handleRedirect}>
               <CustomIcon name="gmail" size={20} /> Signin with your Google
-              adress
+              address
             </Button>
 
             <p className="px-8 text-center text-sm text-muted-foreground">

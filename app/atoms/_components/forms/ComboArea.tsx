@@ -1,261 +1,186 @@
 /* eslint-disable @next/next/no-img-element */
-// import { Textarea } from "@/components/ui/textarea";
-
-// export function ComboArea() {
-//   return (
-//     <div className="grid w-full gap-1.5">
-//       <Textarea placeholder="" />
-//       <p className="text-sm text-muted-foreground">
-//         Type: LP (light punch), MP (medium punch), HP (heavy punch), LK (light kick), MK (medium kick), HK (heavy kick), N (neutral), EX(P) (Ex punch), l | lb | b | rb | r | t (all directions, left | left bottom | etc...), 360 (360 direction), Jf (jump front or b for back), Hb (hold bottom direction), S1 (super art 1, 2 or 3), DR (drive rush), + (next move)
-//       </p>
-//     </div>
-//   );
-// }
 import { TextAlignLeftIcon } from "@radix-ui/react-icons";
 
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
-export function ComboArea() {
+type ComboAreaProps = {
+  onInputAdd: (inputName: string, inputSrc: string) => void;
+  onNewLineAdd: () => void;
+};
+
+//? changer l'url des inputs envoyés ?
+
+export function ComboArea({ onInputAdd, onNewLineAdd }: ComboAreaProps) {
+  const handleAddInput = (name: string, src: string) => {
+    console.log(name)
+    onInputAdd(name, src);
+  };
   return (
     <ToggleGroup className="flex flex-wrap justify-start" type="single">
+
+      {INPUTS_KEYS.map(({value, url, alt}, index) => (
       <ToggleGroupItem
+      key={index}
         className="overflow-hidden p-2"
-        value="key-d"
-        aria-label="Toggle key-d"
+        value={value}
+        aria-label={`Toggle ${value}`}
+        onClick={() =>
+          handleAddInput(value, url)
+        }
       >
         <img
           className="w-6"
-          src="./assets/form/inputs/directions/key-d.png"
-          alt="kicks"
+          src={url}
+          alt={alt}
         />
       </ToggleGroupItem>
-      <ToggleGroupItem
-        className="overflow-hidden p-2"
-        value="key-dc"
-        aria-label="Toggle key-dc"
-      >
-        <img
-          className="w-6"
-          src="./assets/form/inputs/directions/key-dc.png"
-          alt="kicks"
-        />
-      </ToggleGroupItem>
-      <ToggleGroupItem
-        className="overflow-hidden p-2"
-        value="key-dl"
-        aria-label="Toggle key-dl"
-      >
-        <img
-          className="w-6"
-          src="./assets/form/inputs/directions/key-dl.png"
-          alt="kicks"
-        />
-      </ToggleGroupItem>
-      <ToggleGroupItem
-        className="overflow-hidden p-2"
-        value="key-dr"
-        aria-label="Toggle key-dr"
-      >
-        <img
-          className="w-6"
-          src="./assets/form/inputs/directions/key-dr.png"
-          alt="kicks"
-        />
-      </ToggleGroupItem>
-      <ToggleGroupItem
-        className="overflow-hidden p-2"
-        value="key-l"
-        aria-label="Toggle key-l"
-      >
-        <img
-          className="w-6"
-          src="./assets/form/inputs/directions/key-l.png"
-          alt="kicks"
-        />
-      </ToggleGroupItem>
-      <ToggleGroupItem
-        className="overflow-hidden p-2"
-        value="key-lc"
-        aria-label="Toggle key-lc"
-      >
-        <img
-          className="w-6"
-          src="./assets/form/inputs/directions/key-lc.png"
-          alt="kicks"
-        />
-      </ToggleGroupItem>
-      <ToggleGroupItem
-        className="overflow-hidden p-2"
-        value="key-r"
-        aria-label="Toggle key-r"
-      >
-        <img
-          className="w-6"
-          src="./assets/form/inputs/directions/key-r.png"
-          alt="kicks"
-        />
-      </ToggleGroupItem>
-      <ToggleGroupItem
-        className="overflow-hidden p-2"
-        value="key-circle"
-        aria-label="Toggle key-circle"
-      >
-        <img
-          className="w-6"
-          src="./assets/form/inputs/directions/key-circle.png"
-          alt="kicks"
-        />
-      </ToggleGroupItem>
-      <ToggleGroupItem
-        className="overflow-hidden p-2"
-        value="icon_kick_h"
-        aria-label="Toggle icon_kick_h"
-      >
-        <img
-          className="w-6"
-          src="./assets/form/inputs/kicks/icon_kick_h.png"
-          alt="kicks"
-        />
-      </ToggleGroupItem>
-      <ToggleGroupItem
-        className="overflow-hidden p-2"
-        value="icon_kick_l"
-        aria-label="Toggle icon_kick_l"
-      >
-        <img
-          className="w-6"
-          src="./assets/form/inputs/kicks/icon_kick_l.png"
-          alt="kicks"
-        />
-      </ToggleGroupItem>
-      <ToggleGroupItem
-        className="overflow-hidden p-2"
-        value="icon_kick_m"
-        aria-label="Toggle icon_kick_m"
-      >
-        <img
-          className="w-6"
-          src="./assets/form/inputs/kicks/icon_kick_m.png"
-          alt="kicks"
-        />
-      </ToggleGroupItem>
-      <ToggleGroupItem
-        className="overflow-hidden p-2"
-        value="icon_kick"
-        aria-label="Toggle icon_kick"
-      >
-        <img
-          className="w-6"
-          src="./assets/form/inputs/kicks/icon_kick.png"
-          alt="kicks"
-        />
-      </ToggleGroupItem>
-      <ToggleGroupItem
-        className="overflow-hidden p-2"
-        value="icon_punch_h"
-        aria-label="Toggle icon_punch_h"
-      >
-        <img
-          className="w-6"
-          src="./assets/form/inputs/punches/icon_punch_h.png"
-          alt="punches"
-        />
-      </ToggleGroupItem>
-      <ToggleGroupItem
-        className="overflow-hidden p-2"
-        value="icon_punch_l"
-        aria-label="Toggle icon_punch_l"
-      >
-        <img
-          className="w-6"
-          src="./assets/form/inputs/punches/icon_punch_l.png"
-          alt="punches"
-        />
-      </ToggleGroupItem>
-      <ToggleGroupItem
-        className="overflow-hidden p-2"
-        value="icon_punch_m"
-        aria-label="Toggle icon_punch_m"
-      >
-        <img
-          className="w-6"
-          src="./assets/form/inputs/punches/icon_punch_m.png"
-          alt="punches"
-        />
-      </ToggleGroupItem>
-      <ToggleGroupItem
-        className="overflow-hidden p-2"
-        value="icon_punch"
-        aria-label="Toggle icon_punch"
-      >
-        <img
-          className="w-6"
-          src="./assets/form/inputs/punches/icon_punch.png"
-          alt="punches"
-        />
-      </ToggleGroupItem>
-      <ToggleGroupItem
-        className="overflow-hidden p-2"
-        value="key-nutral"
-        aria-label="Toggle key-nutral"
-      >
-        <img
-          className="w-6"
-          src="./assets/form/inputs/specials/key-nutral.png"
-          alt="kicks"
-        />
-      </ToggleGroupItem>
-      <ToggleGroupItem
-        className="overflow-hidden p-2"
-        value="key-plus"
-        aria-label="Toggle key-plus"
-      >
-        <img
-          className="w-6"
-          src="./assets/form/inputs/specials/key-plus.png"
-          alt="kicks"
-        />
-      </ToggleGroupItem>
-      <ToggleGroupItem
-        className="overflow-hidden p-2"
-        value="s1"
-        aria-label="Toggle s1"
-      >
-        <img
-          className="w-10"
-          src="./assets/form/inputs/specials/s1.png"
-          alt="kicks"
-        />
-      </ToggleGroupItem>
-      <ToggleGroupItem
-        className="overflow-hidden p-2"
-        value="s2"
-        aria-label="Toggle s2"
-      >
-        <img
-          className="w-10"
-          src="./assets/form/inputs/specials/s2.png"
-          alt="kicks"
-        />
-      </ToggleGroupItem>
-      <ToggleGroupItem
-        className="overflow-hidden p-2"
-        value="s3"
-        aria-label="Toggle s3"
-      >
-        <img
-          className="w-10"
-          src="./assets/form/inputs/specials/s3.png"
-          alt="kicks"
-        />
-      </ToggleGroupItem>
-      <ToggleGroupItem
-        className="overflow-hidden p-2"
-        value="return"
-        aria-label="return line"
-      >
+      ))}
+     
+      <ToggleGroupItem className="overflow-hidden p-2" value="return" aria-label="return line" onClick={onNewLineAdd}>
         <TextAlignLeftIcon className="h-6 w-6" />
       </ToggleGroupItem>
     </ToggleGroup>
   );
 }
+
+type InputsKeysProps = {
+  value: string;
+  alt: string;
+  src: string;
+  url: string;
+};
+
+const INPUTS_KEYS: InputsKeysProps[] = [
+  {
+    value: "d",
+    alt: "direction",
+    src: "/assets/form/inputs/directions/key-d.png",
+    url: "https://www.streetfighter.com/6/assets/images/common/controller/key-d.png",
+  },
+  {
+    value: "u",
+    alt: "directions",
+    src: "/assets/form/inputs/directions/key-u.png",
+    url: "https://www.streetfighter.com/6/assets/images/common/controller/key-u.png",
+  },
+  {
+    value: "dc",
+    alt: "directions",
+    src: "/assets/form/inputs/directions/key-dc.png",
+    url: "https://www.streetfighter.com/6/assets/images/common/controller/key-dc.png",
+  },
+  {
+    value: "dl",
+    alt: "directions",
+    src: "/assets/form/inputs/directions/key-dl.png",
+    url: "https://www.streetfighter.com/6/assets/images/common/controller/key-dl.png",
+  },
+  {
+    value: "dr",
+    alt: "directions",
+    src: "/assets/form/inputs/directions/key-dr.png",
+    url: "https://www.streetfighter.com/6/assets/images/common/controller/key-dr.png",
+  },
+  {
+    value: "l",
+    alt: "directions",
+    src: "/assets/form/inputs/directions/key-l.png",
+    url: "https://www.streetfighter.com/6/assets/images/common/controller/key-l.png",
+  },
+  {
+    value: "lc",
+    alt: "directions",
+    src: "/assets/form/inputs/directions/key-lc.png",
+    url: "https://www.streetfighter.com/6/assets/images/common/controller/key-lc.png",
+  },
+  {
+    value: "r",
+    alt: "directions",
+    src: "/assets/form/inputs/directions/key-r.png",
+    url: "https://www.streetfighter.com/6/assets/images/common/controller/key-r.png",
+  },
+  {
+    value: "360",
+    alt: "directions",
+    src: "/assets/form/inputs/directions/key-circle.png",
+    url: "https://www.streetfighter.com/6/assets/images/common/controller/key-circle.png",
+  },
+  {
+    value: "HK",
+    alt: "kicks",
+    src: "/assets/form/inputs/kicks/icon_kick_h.png",
+    url: "https://www.streetfighter.com/6/assets/images/common/controller/icon_kick_h.png",
+  },
+  {
+    value: "LK",
+    alt: "kicks",
+    src: "/assets/form/inputs/kicks/icon_kick_l.png",
+    url: "https://www.streetfighter.com/6/assets/images/common/controller/icon_kick_l.png",
+  },
+  {
+    value: "MK",
+    alt: "kicks",
+    src: "/assets/form/inputs/kicks/icon_kick_m.png",
+    url: "https://www.streetfighter.com/6/assets/images/common/controller/icon_kick_m.png",
+  },
+  {
+    value: "K",
+    alt: "kicks",
+    src: "/assets/form/inputs/kicks/icon_kick.png",
+    url: "https://www.streetfighter.com/6/assets/images/common/controller/icon_kick.png",
+  },
+  {
+    value: "HP",
+    alt: "punches",
+    src: "/assets/form/inputs/punches/icon_punch_h.png",
+    url: "https://www.streetfighter.com/6/assets/images/common/controller/icon_punch_h.png",
+  },
+  {
+    value: "LP",
+    alt: "punches",
+    src: "/assets/form/inputs/punches/icon_punch_l.png",
+    url: "https://www.streetfighter.com/6/assets/images/common/controller/icon_punch_l.png",
+  },
+  {
+    value: "MP",
+    alt: "punches",
+    src: "/assets/form/inputs/punches/icon_punch_m.png",
+    url: "https://www.streetfighter.com/6/assets/images/common/controller/icon_punch_m.png",
+  },
+  {
+    value: "P",
+    alt: "punches",
+    src: "/assets/form/inputs/punches/icon_punch.png",
+    url: "https://www.streetfighter.com/6/assets/images/common/controller/icon_punch.png",
+  },
+  {
+    value: "N",
+    alt: "specials",
+    src: "/assets/form/inputs/specials/key-nutral.png",
+    url: "https://www.streetfighter.com/6/assets/images/common/controller/key-nutral.png",
+  },
+  {
+    value: "plus",
+    alt: "specials",
+    src: "/assets/form/inputs/specials/key-plus.png",
+    url: "https://www.streetfighter.com/6/assets/images/common/controller/key-plus.png",
+  },
+  {
+    value: "s1",
+    alt: "specials",
+    src: "/assets/form/inputs/specials/s1.png",
+    url: "https://www.streetfighter.com/6/assets/images/common/controller/s1.png",
+  },
+  {
+    value: "s2",
+    alt: "specials",
+    src: "/assets/form/inputs/specials/s2.png",
+    url: "https://www.streetfighter.com/6/assets/images/common/controller/s2.png",
+  },
+  {
+    value: "s3",
+    alt: "specials",
+    src: "/assets/form/inputs/specials/s3.png",
+    url: "https://www.streetfighter.com/6/assets/images/common/controller/s3.png",
+  },
+];
