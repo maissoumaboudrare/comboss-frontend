@@ -16,27 +16,6 @@ export const Header = () => {
   const { isAuthenticated, setIsAuthenticated, checkAuthStatus } = useAuth();
   const router = useRouter();
 
-  // useEffect(() => {
-  //   const checkAuthStatus = async () => {
-  //     try {
-  //       const response = await fetchAPI("/api/auth/status", {
-  //         method: "GET",
-  //       });
-  //       console.log(response.isAuthenticated)
-  //       setIsAuthenticated(response.isAuthenticated);
-  //     } catch (error) {
-  //       console.error("Failed to check authentication status:", error);
-  //     }
-  //   };
-
-  //   //? token csrf 
-
-  //   checkAuthStatus();
-  //   const intervalId = setInterval(checkAuthStatus, 2 * 60 * 1000); // Check every 2 minutes
-
-  //   return () => clearInterval(intervalId); // Clean up the interval on component unmount
-  // }, []);
-
   const handleLogout = async () => {
     try {
       await fetchAPI("/api/users/logout", {

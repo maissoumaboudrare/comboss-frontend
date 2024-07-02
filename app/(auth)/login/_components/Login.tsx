@@ -68,19 +68,6 @@ const Login = () => {
         }),
       });
 
-      // const checkAuthStatus = async () => {
-      //   try {
-      //     const response = await fetchAPI("/api/auth/status", {
-      //       method: "GET",
-      //     });
-      //     console.log(response.isAuthenticated);
-      //     setIsAuthenticated(response.isAuthenticated);
-      //   } catch (error) {
-      //     console.error("Failed to check authentication status:", error);
-      //   }
-      // };
-
-      // await checkAuthStatus();
       await checkAuthStatus();
       setIsAuthenticated(true);
       router.push('/');

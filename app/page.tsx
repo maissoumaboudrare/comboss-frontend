@@ -6,21 +6,6 @@ import { fetchAPI } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
 export default function Home() {
-  
-
-    // const checkAuthStatus = async (e) => {
-    //   try {
-    //     e.preventDefault()
-    //     const response = await fetchAPI("/api/auth/status", {
-    //       method: "GET",
-    //     });
-    //     console.log(response.isAuthenticated)
-    //   } catch (error) {
-    //     console.error("Failed to check authentication status:", error);
-    //   }
-    // };
-
-    //checkAuthStatus();
 
   return (
     <main>
