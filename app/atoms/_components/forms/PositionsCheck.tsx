@@ -13,7 +13,6 @@ export function PositionsCheck({
 }: PositionsCheckProps) {
   const handlePositionChange = (position: string, checked: string | boolean) => {
   if (checked) {
-    console.log(position)
     onChange(position);
   } else {
     onChange(position);

@@ -1,13 +1,13 @@
-import type { Config } from "tailwindcss"
+import type { Config } from "tailwindcss";
 
 const config = {
   darkMode: ["class"],
   content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
-	],
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
+  ],
   prefix: "",
   theme: {
     container: {
@@ -18,9 +18,9 @@ const config = {
       },
     },
     fontFamily: {
-      sans: ['var(--font-geist-sans)'],
-      mono: ['var(--font-geist-mono)'],
-      caption: ["var(--font-caption)"]
+      sans: ["var(--font-geist-sans)"],
+      mono: ["var(--font-geist-mono)"],
+      caption: ["var(--font-caption)"],
     },
     extend: {
       colors: {
@@ -72,19 +72,20 @@ const config = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
-        "like": {
+        like: {
           from: { backgroundPosition: "left" },
           to: { backgroundPosition: "right" },
         },
       },
       animation: {
+        "stars-spin-slow": "spin 3s linear infinite",
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "like": "like 0.8s steps(28)",
+        like: "like 0.8s steps(28)",
       },
     },
   },
   plugins: [require("tailwindcss-animate")],
-} satisfies Config
+} satisfies Config;
 
-export default config
+export default config;

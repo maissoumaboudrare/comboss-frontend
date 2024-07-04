@@ -7,6 +7,7 @@ import { GeistMono } from "geist/font/mono";
 import { Header } from "./molecules/_components/Header";
 
 import { AuthProvider } from "@/context/AuthContext";
+import { Footer } from "./molecules/_components/Footer";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -35,8 +36,11 @@ export default function RootLayout({
         )}
       >
         <AuthProvider>
-          <Header />
-          {children}
+          <div className="flex flex-col min-h-screen">
+            <Header />
+            {children}
+            <Footer />
+          </div>
         </AuthProvider>
       </body>
     </html>

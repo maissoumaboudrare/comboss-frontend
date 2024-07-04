@@ -29,7 +29,6 @@ const Character = async ({ params }: { params: { id: string } }) => {
 
   try {
     const character = await fetchCharacter(Number(params.id));
-    console.log(character);
 
     return (
       <main>

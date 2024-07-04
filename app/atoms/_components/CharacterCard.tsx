@@ -15,7 +15,7 @@ export const CharacterCard = ({ id, name, src }: CharacterProps) => {
   // };
   return (
     <Link href={`/character/${id}`}>
-    <div className="relative group cursor-pointer overflow-hidden w-full h-full rounded-lg">
+    <div className="relative group cursor-pointer overflow-hidden w-full h-full rounded-lg transition duration-300 ease-in-out hover:rotate-3">
       <img
         className="h-full max-w-full transition duration-300 ease-in-out group-hover:scale-110 group-hover:grayscale object-cover"
         src={src}

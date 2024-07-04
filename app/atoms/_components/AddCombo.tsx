@@ -124,7 +124,7 @@ export function AddCombo() {
       alert("Combo added successfully!");
       setCombo({ characterID: 0, comboName: "", positions: [] });
       setLines([[]]);
-      router.push('/');
+      router.push(`${process.env.NEXT_PUBLIC_FRONT_BASE_URL}/character/${combo.characterID}`);
     } catch (error) {
       console.error("Error adding combo:", error);
     }

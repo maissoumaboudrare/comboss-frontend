@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { useRouter } from "next/navigation";
@@ -27,6 +28,8 @@ import { useForm } from "react-hook-form";
 import z from "zod";
 import { fetchAPI } from "@/lib/utils";
 
+import { useEffect, useState } from "react";
+
 const passwordValidation = new RegExp(
   /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
 );
@@ -53,6 +56,12 @@ const SigninSchema = z
     confirmPassword: z
       .string()
       .min(8, "Password requires at least 8 characters !"),
+    avatar: z
+      .string()
+      .url()
+      .refine((val) => val !== "", {
+        message: "Avatar is required!",
+      }),
   })
   .superRefine(({ confirmPassword, password }, ctx) => {
     if (confirmPassword !== password) {
@@ -75,10 +84,31 @@ const Signin = () => {
       email: "",
       password: "",
       confirmPassword: "",
+      avatar: "",
     },
   });
 
+  const [avatars, setAvatars] = useState<string[]>([]);
   const router = useRouter();
+
+    
+
+  useEffect(() => {
+    const fetchAvatars = async () => {
+      try {
+        const response = await fetchAPI("/api/characters", {
+          method: "GET",
+        });
+
+        const thumbnails = response.map((char: any) => char.thumbnail);
+        setAvatars(thumbnails);
+      } catch (error) {
+        console.error("Failed to fetch avatars:", error);
+      }
+    };
+
+    fetchAvatars();
+  }, []);
 
   const handleSubmitSignin = async (values: SigninValues) => {
     try {
@@ -91,6 +121,7 @@ const Signin = () => {
           pseudo: values.pseudo,
           email: values.email,
           password: values.password,
+          avatar: values.avatar,
           isPremium: false,
         }),
       });
@@ -102,8 +133,7 @@ const Signin = () => {
   };
 
   const handleRedirect = () => {
-    console.log("first");
-    
+    console.log("google connect !");
   };
 
   return (
@@ -181,6 +211,31 @@ const Signin = () => {
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name="avatar"
+              render={({ field }) => (
+                <FormItem className="mt-5">
+                  <FormLabel>Select an Avatar</FormLabel>
+                  <div className="flex flex-wrap gap-2 items-center">
+                    {avatars.map((thumbnail, index) => (
+                      <div key={index} className={`overflow-hidden w-11 h-11 rounded-lg cursor-pointer transition duration-300 ease-in-out hover:border-2 hover:border-primary hover:rotate-6 ${field.value === thumbnail ? "w-9 h-9 border-4 border-mute grayscale rotate-12" : ""}`}>
+                        <img
+                          src={thumbnail}
+                          alt={`Avatar ${index}`}
+                          className={"cursor-pointer object-cover w-full h-full"}
+                          onClick={() => field.onChange(thumbnail)}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                  <FormDescription>
+                    Select an avatar for your profile.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </CardContent>
           <CardFooter className="flex flex-col gap-8">
             <Button type="submit" className="w-full">
@@ -196,7 +251,11 @@ const Signin = () => {
                 </span>
               </div>
             </div>
-            <Button className="py-5 w-full gap-2" variant={"outline"} onClick={handleRedirect}>
+            <Button
+              className="py-5 w-full gap-2"
+              variant={"outline"}
+              onClick={handleRedirect}
+            >
               <CustomIcon name="gmail" size={20} /> Signin with your Google
               address
             </Button>

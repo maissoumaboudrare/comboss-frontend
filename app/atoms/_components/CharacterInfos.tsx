@@ -21,7 +21,7 @@ type Character = {
 
 export const CharacterInfos = ({ character }: { character: Character }) => {
   return (
-    <Section className="sticky top-[65px] flex flex-col gap-3 pl-0 m-0">
+    <Section className="sticky top-[86px] flex flex-col gap-3 pl-0 m-0">
       <div className="flex items-center">
         <div className="flex flex-col gap-2">
           <h2 className="text-2xl font-semibold tracking-tight">Ken Master</h2>
