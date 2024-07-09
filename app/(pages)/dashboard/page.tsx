@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { CustomIcon } from "@/app/atoms/_components/icons/CustomIcons";
+import { Section } from "@/app/atoms/_components/Section";
 
 const passwordValidation = new RegExp(
   /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
@@ -94,7 +95,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="container mx-auto mt-10">
+    <Section className="flex h-screen justify-center items-center">
       <Card>
         <CardHeader>
           <CardTitle>Dashboard ⚙️</CardTitle>
@@ -235,7 +236,7 @@ const Dashboard = () => {
           </p>
         </CardFooter>
       </Card>
-    </div>
+    </Section>
   );
 };
 

@@ -20,7 +20,3 @@ export const HeartButton = () => {
     ></div>
   );
 };
-
-/*
-absolute top-1/2 left-[70%] transform -translate-x-1/2 -translate-y-1/2 
-*/

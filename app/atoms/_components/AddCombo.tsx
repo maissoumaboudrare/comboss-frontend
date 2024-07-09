@@ -2,7 +2,10 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { fetchAPI } from "@/lib/utils";
-import { ChangeEvent, useEffect, useState } from "react";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -21,18 +24,29 @@ import { ComboArea } from "./forms/ComboArea";
 import { ComboPreview } from "./forms/ComboPreview";
 import { Input } from "@/components/ui/input";
 
-type Combo = {
-  characterID: number;
-  comboName: string;
-  positions: { positionName: string }[];
-};
+const comboSchema = z.object({
+  comboName: z.string()
+    .min(1, "Combo name is required")
+    .max(50, "Combo name must not exceed 50 characters")
+    .regex(/^[A-Za-z\s]+$/, "Combo name can only contain letters and spaces"),
+  characterID: z.number()
+    .min(1, { message: "Character selection is required" }),
+  positions: z.array(z.object({
+    positionName: z.string()
+  })).min(1, { message: "At least one position is required" }),
+  inputs: z.array(z.array(z.object({
+    inputName: z.string(),
+    inputSrc: z.string()
+  }))).min(1, "At least one line of inputs is required").max(10, { message: "Combo can have a maximum of 10 lines" })
+    .refine(lines => lines.every(line => line.length <= 8), {
+      message: "Each line must have 1-8 inputs",
+      path: ["inputs"]
+    }) 
+});
+
+type ComboFormValues = z.infer<typeof comboSchema>;
 
 type InputData = {
-  inputName: string;
-  inputSrc: string;
-};
-
-type Input = {
   inputName: string;
   inputSrc: string;
 };
@@ -45,13 +59,19 @@ type Character = {
 
 export function AddCombo() {
   const router = useRouter();
-  const [combo, setCombo] = useState<Combo>({
-    characterID: 0,
-    positions: [],
-    comboName: "",
+
+  const { control, handleSubmit, formState: { errors }, reset, setValue, getValues, watch,setError } = useForm<ComboFormValues>({
+    resolver: zodResolver(comboSchema),
+    defaultValues: {
+      comboName: "",
+      characterID: undefined,
+      positions: [],
+      inputs: [[]],
+    },
   });
-  const [lines, setLines] = useState<Input[][]>([[]]);
+
   const [characters, setCharacters] = useState<Character[]>([]);
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     const fetchCharacters = async () => {
@@ -64,55 +84,58 @@ export function AddCombo() {
     fetchCharacters();
   }, []);
 
-  const addInputToLine = (inputName: string, inputSrc: string) => {
-    const currentLineIndex = lines.length - 1;
-    const currentLineLength = lines[currentLineIndex].length;
-    const newInput: InputData = { inputName, inputSrc};
-
-    const updatedLines = [...lines];
-    updatedLines[currentLineIndex].push(newInput);
-    setLines(updatedLines);
-  };
-
-  const addNewLine = () => {
-    if (lines.length < 10) {
-      setLines([...lines, []]);
-    }
-  };
-
   const handleCharacterChange = (characterID: number) => {
-    setCombo({ ...combo, characterID });
+    setValue("characterID", characterID, { shouldValidate: true });
   };
 
   const handlePositionChange = (position: string) => {
-    const positionObject = { positionName: position };
-    if (combo.positions.some((pos) => pos.positionName === position)) {
-      setCombo({
-        ...combo,
-        positions: combo.positions.filter((pos) => pos.positionName !== position),
-      });
+    const currentPositions = getValues("positions") || [];
+    if (currentPositions.some(pos => pos.positionName === position)) {
+      setValue("positions", currentPositions.filter(pos => pos.positionName !== position));
     } else {
-      setCombo({ ...combo, positions: [...combo.positions, positionObject] });
+      setValue("positions", [...currentPositions, { positionName: position }], { shouldValidate: true });
     }
   };
 
-
-  const handleComboNameChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setCombo({ ...combo, comboName: event.target.value });
+  const addInputToLine = (inputName: string, inputSrc: string) => {
+    const currentLines = getValues("inputs");
+    const currentLineIndex = currentLines.length - 1;
+    if (currentLines[currentLineIndex].length < 8) {
+      currentLines[currentLineIndex].push({ inputName, inputSrc });
+      setValue("inputs", currentLines, { shouldValidate: true });
+    }
   };
 
-  const handleSubmitCombo = async () => {
+  const addNewLine = () => {
+    const currentLines = getValues("inputs");
+    if (currentLines.length < 10) {
+      setValue("inputs", [...currentLines, []], { shouldValidate: true });
+    }
+  };
+ 
+
+  const resetPreview = () => {
+    setValue("inputs", [[]], { shouldValidate: true });
+  };
+
+  const onSubmit = async (data: ComboFormValues) => {
+    if (data.inputs.length === 0 || data.inputs.every(line => line.length === 0)) {
+      setError("inputs", { type: "manual", message: "At least one input is required" });
+      return;
+    }
+
+
     try {
       const comboData = {
         combo: {
-          characterID: combo.characterID,
-          comboName: combo.comboName,
+          characterID: data.characterID,
+          comboName: data.comboName,
         },
-        positions: combo.positions,
-        inputs: lines,
+        positions: data.positions,
+        inputs: data.inputs,
       };
 
-      const response = await fetchAPI("/api/combos", {
+      await fetchAPI("/api/combos", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -122,21 +145,19 @@ export function AddCombo() {
       });
 
       alert("Combo added successfully!");
-      setCombo({ characterID: 0, comboName: "", positions: [] });
-      setLines([[]]);
-      router.push(`${process.env.NEXT_PUBLIC_FRONT_BASE_URL}/character/${combo.characterID}`);
+      reset();
+      setIsOpen(false);
+      router.push(`${process.env.NEXT_PUBLIC_FRONT_BASE_URL}/character/${data.characterID}`);
     } catch (error) {
       console.error("Error adding combo:", error);
     }
   };
 
-  const resetPreview = () => {
-    setCombo({ characterID: 0, positions: [], comboName: combo.comboName });
-    setLines([[]]);
-  };
+  const positions = watch("positions");
+  const inputs = watch("inputs");
 
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button variant={"outline"} className="size-8 p-0">
           <CustomIcon
@@ -156,61 +177,73 @@ export function AddCombo() {
             Here, edit your combo inputs and set the execution conditions.
           </DialogDescription>
         </DialogHeader>
-        <div className="grid gap-8 py-4">
-          <div className="flex flex-col items-start gap-3">
-            <Label htmlFor="comboName" className="text-right">
-              Combo Name:
-            </Label>
-            <Input
-              placeholder="Black Mamba"
-              value={combo.comboName}
-              onChange={handleComboNameChange}
-            />
-          </div>
-          <div className="flex flex-col items-start gap-3">
-            <Label htmlFor="character" className="text-right">
-              Choose the fighter's combo:
-            </Label>
-            <CharactersSelect
-              characters={characters}
-              onChange={handleCharacterChange}
-            />
-          </div>
-          <div className="flex flex-col items-start gap-3">
-            <Label htmlFor="position" className="text-right">
-              Select position:
-            </Label>
-            <PositionsCheck
-              selectedPositions={combo.positions}
-              onChange={handlePositionChange}
-            />
-          </div>
-          <div className="flex flex-col items-start gap-3">
-            <Label htmlFor="combo" className="text-right">
-              Type your awesome combo:
-            </Label>
-            <ComboArea onInputAdd={addInputToLine} onNewLineAdd={addNewLine} />
-            <div className="relative w-full">
-              <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t"></span>
-              </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-background px-2 text-muted-foreground">
-                  👇 Combo preview 👇
-                </span>
-              </div>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="grid gap-8 py-4">
+            <div className="flex flex-col items-start gap-3">
+              <Label htmlFor="comboName" className="text-right">
+                Combo Name:
+              </Label>
+              <Controller
+                name="comboName"
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    placeholder="Black Mamba"
+                    {...field}
+                  />
+                )}
+              />
+              {errors.comboName && <p className="text-red-500">{errors.comboName.message}</p>}
             </div>
-            <ComboPreview inputs={lines} />
+            <div className="flex flex-col items-start gap-3">
+              <Label htmlFor="character" className="text-right">
+                Choose the fighter's combo:
+              </Label>
+              <CharactersSelect
+                characters={characters}
+                onChange={handleCharacterChange}
+              />
+              {errors.characterID && <p className="text-red-500">{errors.characterID.message}</p>}
+            </div>
+            <div className="flex flex-col items-start gap-3">
+              <Label htmlFor="position" className="text-right">
+                Select position:
+              </Label>
+              <PositionsCheck
+                selectedPositions={positions}
+                onChange={handlePositionChange}
+              />
+              {errors.positions && <p className="text-red-500">{errors.positions.message}</p>}
+            </div>
+            <div className="flex flex-col items-start gap-3">
+              <Label htmlFor="combo" className="text-right">
+                Type your awesome combo:
+              </Label>
+              <ComboArea onInputAdd={addInputToLine} onNewLineAdd={addNewLine} />
+              {errors.inputs && <p className="text-red-500">{errors.inputs.message}</p>}
+
+              <div className="relative w-full">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="w-full border-t"></span>
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-background px-2 text-muted-foreground">
+                    👇 Combo preview 👇
+                  </span>
+                </div>
+              </div>
+              <ComboPreview inputs={inputs} />
+            </div>
           </div>
-        </div>
-        <DialogFooter className="sm:justify-center">
-          <Button type="button" variant={"secondary"} onClick={resetPreview}>
-            Reset Preview
-          </Button>
-          <Button type="button" onClick={handleSubmitCombo}>
-            Send Combo
-          </Button>
-        </DialogFooter>
+          <DialogFooter className="sm:justify-center">
+            <Button type="button" variant={"secondary"} onClick={resetPreview}>
+              Reset Preview
+            </Button>
+            <Button type="submit">
+              Send Combo
+            </Button>
+          </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   );

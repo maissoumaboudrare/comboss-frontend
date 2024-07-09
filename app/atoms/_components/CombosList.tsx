@@ -11,13 +11,12 @@ import {
 import { Section } from "./Section";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
-import { HeartIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
 import { CustomIcon } from "./icons/CustomIcons";
 import { cn, fetchAPI } from "@/lib/utils";
 import { Button, buttonVariants } from "@/components/ui/button";
-import { HeartButton } from "./HeartButton";
 import { useEffect, useState } from "react";
+import { useAuth } from "@/context/AuthContext";
 
 type Combo = {
   comboID: number;
@@ -30,6 +29,7 @@ type Combo = {
     inputOrder: number;
   }[];
   username: string;
+  userID: number; 
 };
 
 type CombosListProps = {
@@ -37,6 +37,7 @@ type CombosListProps = {
 };
 
 export const CombosList = ({ characterID }: CombosListProps) => {
+  const { user, isAuthenticated } = useAuth();
   const [combos, setCombos] = useState<Combo[]>([]);
 
   useEffect(() => {
@@ -57,6 +58,18 @@ export const CombosList = ({ characterID }: CombosListProps) => {
 
     fetchCombos();
   }, [characterID]);
+
+  const handleDeleteCombo = async (comboID: number) => {
+    try {
+      await fetchAPI(`/api/combos/${comboID}`, {
+        method: "DELETE",
+      });
+      setCombos(combos.filter(combo => combo.comboID !== comboID));
+      alert("Combo deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting combo:", error);
+    }
+  };
 
   return (
     <Section className="m-0 flex flex-col pr-0 gap-4">
@@ -115,7 +128,7 @@ export const CombosList = ({ characterID }: CombosListProps) => {
                   }
                   acc[lineIndex].push(input);
                   return acc;
-                }, {} as { [key: number]: { inputName: string; inputSrc: string; lineOrder: number; inputOrder: number }[] }) // Removed 'lineOrder' from the type definition
+                }, {} as { [key: number]: { inputName: string; inputSrc: string; lineOrder: number; inputOrder: number }[] })
               ).map((line, lineIndex, lines) => (
                 <div key={lineIndex}>
                   <div className="flex space-x-2">
@@ -168,20 +181,16 @@ export const CombosList = ({ characterID }: CombosListProps) => {
                   </Link>
                 </div>
                 <div className="flex">
-                  <Link
-                    href={"/"}
-                    className={cn(
-                      buttonVariants({ variant: "outline" }),
-                      "size-8 p-0"
-                    )}
-                  >
-                    <CustomIcon
-                      className="inline text-foreground"
-                      name="trash"
-                      size={24}
-                      fill="red"
-                    />
-                  </Link>
+                {isAuthenticated && combo.userID === user?.userID && (
+                    <Button variant={"ghost"} onClick={() => handleDeleteCombo(combo.comboID)}>
+                      <CustomIcon
+                        className="inline text-foreground"
+                        name="trash"
+                        size={24}
+                        fill="red"
+                      />
+                    </Button>
+                  )}
                 </div>
               </div>
             </CardFooter>
@@ -211,7 +220,7 @@ export const CombosList = ({ characterID }: CombosListProps) => {
             <Separator />
             <CardContent className="p-2.5 overflow-x-auto scrollbar-thin scrollbar-thumb-primary scrollbar-track-muted">
               
-                 <img className="rounded-lg" src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExNXduNGkxd2d6dndwam5sbDJwcGx1ZTNxczBiaWVuNG1tcnJlYnV1ciZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/tmpw2yEJeons64bivY/giphy.webp" alt="Gif" />
+                 <img className="rounded-lg" src="/assets/others/no-combos-yet.webp" alt="Gif" />
             </CardContent>
            
           </Card>
