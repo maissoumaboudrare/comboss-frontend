@@ -25,23 +25,37 @@ import { ComboPreview } from "./forms/ComboPreview";
 import { Input } from "@/components/ui/input";
 
 const comboSchema = z.object({
-  comboName: z.string()
+  comboName: z
+    .string()
     .min(1, "Combo name is required")
     .max(50, "Combo name must not exceed 50 characters")
     .regex(/^[A-Za-z\s]+$/, "Combo name can only contain letters and spaces"),
-  characterID: z.number()
+  characterID: z
+    .number()
     .min(1, { message: "Character selection is required" }),
-  positions: z.array(z.object({
-    positionName: z.string()
-  })).min(1, { message: "At least one position is required" }),
-  inputs: z.array(z.array(z.object({
-    inputName: z.string(),
-    inputSrc: z.string()
-  }))).min(1, "At least one line of inputs is required").max(10, { message: "Combo can have a maximum of 10 lines" })
-    .refine(lines => lines.every(line => line.length <= 8), {
+  positions: z
+    .array(
+      z.object({
+        positionName: z.string(),
+      })
+    )
+    .min(1, { message: "At least one position is required" }),
+  inputs: z
+    .array(
+      z.array(
+        z.object({
+          inputName: z.string(),
+          inputSrc: z.string(),
+        })
+      )
+    )
+    .min(1, "At least one line of inputs is required")
+    .max(10, { message: "Combo can have a maximum of 10 lines" })
+    .refine((lines) => lines.every((line) => line.length <= 8), {
       message: "Each line must have 1-8 inputs",
-      path: ["inputs"]
-    }) 
+      path: ["inputs"],
+    }),
+    videoURL: z.string().url("Invalid URL").optional().or(z.literal('')),
 });
 
 type ComboFormValues = z.infer<typeof comboSchema>;
@@ -60,13 +74,23 @@ type Character = {
 export function AddCombo() {
   const router = useRouter();
 
-  const { control, handleSubmit, formState: { errors }, reset, setValue, getValues, watch,setError } = useForm<ComboFormValues>({
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    reset,
+    setValue,
+    getValues,
+    watch,
+    setError,
+  } = useForm<ComboFormValues>({
     resolver: zodResolver(comboSchema),
     defaultValues: {
       comboName: "",
       characterID: undefined,
       positions: [],
       inputs: [[]],
+      videoURL: undefined,
     },
   });
 
@@ -90,10 +114,15 @@ export function AddCombo() {
 
   const handlePositionChange = (position: string) => {
     const currentPositions = getValues("positions") || [];
-    if (currentPositions.some(pos => pos.positionName === position)) {
-      setValue("positions", currentPositions.filter(pos => pos.positionName !== position));
+    if (currentPositions.some((pos) => pos.positionName === position)) {
+      setValue(
+        "positions",
+        currentPositions.filter((pos) => pos.positionName !== position)
+      );
     } else {
-      setValue("positions", [...currentPositions, { positionName: position }], { shouldValidate: true });
+      setValue("positions", [...currentPositions, { positionName: position }], {
+        shouldValidate: true,
+      });
     }
   };
 
@@ -112,28 +141,43 @@ export function AddCombo() {
       setValue("inputs", [...currentLines, []], { shouldValidate: true });
     }
   };
- 
 
   const resetPreview = () => {
     setValue("inputs", [[]], { shouldValidate: true });
   };
 
+  const convertToEmbedUrl = (url: string) => {
+    const urlObj = new URL(url);
+    const videoID = urlObj.searchParams.get("v");
+    return `https://www.youtube.com/embed/${videoID}`;
+  };
+
   const onSubmit = async (data: ComboFormValues) => {
-    if (data.inputs.length === 0 || data.inputs.every(line => line.length === 0)) {
-      setError("inputs", { type: "manual", message: "At least one input is required" });
+    if (
+      data.inputs.length === 0 ||
+      data.inputs.every((line) => line.length === 0)
+    ) {
+      setError("inputs", {
+        type: "manual",
+        message: "At least one input is required",
+      });
       return;
     }
 
+    const videoURL = data.videoURL ? convertToEmbedUrl(data.videoURL) : undefined;
 
     try {
       const comboData = {
         combo: {
           characterID: data.characterID,
           comboName: data.comboName,
+          videoURL: videoURL,
         },
         positions: data.positions,
         inputs: data.inputs,
       };
+
+      console.log(comboData)
 
       await fetchAPI("/api/combos", {
         method: "POST",
@@ -147,7 +191,9 @@ export function AddCombo() {
       alert("Combo added successfully!");
       reset();
       setIsOpen(false);
-      router.push(`${process.env.NEXT_PUBLIC_FRONT_BASE_URL}/character/${data.characterID}`);
+      // router.push(
+      //   `${process.env.NEXT_PUBLIC_FRONT_BASE_URL}/character/${data.characterID}`
+      // );
     } catch (error) {
       console.error("Error adding combo:", error);
     }
@@ -167,7 +213,7 @@ export function AddCombo() {
           />
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px] max-h-[80vh] overflow-y-auto scrollbar-thin scrollbar-thumb-primary scrollbar-track-muted scrollbar-thumb-rounded scrollbar-track-rounded">
         <DialogHeader>
           <DialogTitle>
             Add your best Combo{" "}
@@ -187,13 +233,12 @@ export function AddCombo() {
                 name="comboName"
                 control={control}
                 render={({ field }) => (
-                  <Input
-                    placeholder="Black Mamba"
-                    {...field}
-                  />
+                  <Input placeholder="Black Mamba" {...field} />
                 )}
               />
-              {errors.comboName && <p className="text-red-500">{errors.comboName.message}</p>}
+              {errors.comboName && (
+                <p className="text-red-500">{errors.comboName.message}</p>
+              )}
             </div>
             <div className="flex flex-col items-start gap-3">
               <Label htmlFor="character" className="text-right">
@@ -203,7 +248,9 @@ export function AddCombo() {
                 characters={characters}
                 onChange={handleCharacterChange}
               />
-              {errors.characterID && <p className="text-red-500">{errors.characterID.message}</p>}
+              {errors.characterID && (
+                <p className="text-red-500">{errors.characterID.message}</p>
+              )}
             </div>
             <div className="flex flex-col items-start gap-3">
               <Label htmlFor="position" className="text-right">
@@ -213,14 +260,39 @@ export function AddCombo() {
                 selectedPositions={positions}
                 onChange={handlePositionChange}
               />
-              {errors.positions && <p className="text-red-500">{errors.positions.message}</p>}
+              {errors.positions && (
+                <p className="text-red-500">{errors.positions.message}</p>
+              )}
+            </div>
+            <div className="flex flex-col items-start gap-3">
+              <Label htmlFor="videoUrl" className="text-right">
+                Video URL:
+              </Label>
+              <Controller
+                name="videoURL"
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    {...field}
+                    placeholder="https://www.youtube.com/watch?v=example"
+                  />
+                )}
+              />
+              {errors.videoURL && (
+                <p className="text-red-500">{errors.videoURL.message}</p>
+              )}
             </div>
             <div className="flex flex-col items-start gap-3">
               <Label htmlFor="combo" className="text-right">
                 Type your awesome combo:
               </Label>
-              <ComboArea onInputAdd={addInputToLine} onNewLineAdd={addNewLine} />
-              {errors.inputs && <p className="text-red-500">{errors.inputs.message}</p>}
+              <ComboArea
+                onInputAdd={addInputToLine}
+                onNewLineAdd={addNewLine}
+              />
+              {errors.inputs && (
+                <p className="text-red-500">{errors.inputs.message}</p>
+              )}
 
               <div className="relative w-full">
                 <div className="absolute inset-0 flex items-center">
@@ -239,9 +311,7 @@ export function AddCombo() {
             <Button type="button" variant={"secondary"} onClick={resetPreview}>
               Reset Preview
             </Button>
-            <Button type="submit">
-              Send Combo
-            </Button>
+            <Button type="submit">Send Combo</Button>
           </DialogFooter>
         </form>
       </DialogContent>
