@@ -2,15 +2,19 @@
 import { Hero } from "./molecules/_components/Hero";
 import { Spacing } from "./atoms/_components/Spacing";
 import { Characters } from "./molecules/_components/Characters";
+import SliderHero from "./atoms/_components/SliderHero";
+
+
 
 export default function Home() {
 
   return (
     <main className="flex-grow">
-      <Spacing size="md" />
+      <Spacing size="xs" />
+      <SliderHero/>
+      <Spacing size="sm" />
       <Hero/>
       <Spacing size="md" />
-      {/* <Button onClick={(e) => checkAuthStatus(e)}>STATUS</Button> */}
       <Characters/>
       <Spacing size="md" />
     </main>

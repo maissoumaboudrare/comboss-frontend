@@ -26,6 +26,7 @@ import z from "zod";
 import { fetchAPI } from "@/lib/utils";
 
 import { useAuth } from "@/context/AuthContext";
+import { Bounce, toast } from 'react-toastify';
 
 
 const LoginSchema = z.object({
@@ -70,6 +71,17 @@ const Login = () => {
 
       await checkAuthStatus();
       setIsAuthenticated(true);
+      toast.success("Welcome back, street fighter!", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        transition: Bounce,
+      });
       router.push('/');
 
     } catch (error) {

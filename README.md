@@ -42,6 +42,7 @@ Combosss is a web app that serves as a hub for versus fighting game enthusiasts 
 - tailwind-merge - v2.3.0
 - tailwindcss-animate - v1.0.7
 - zod - v3.23.8
+- react-toastify - v10.0.5
 
 ## Features
 - **User Authentication**: Secure sign-up and login functionality.

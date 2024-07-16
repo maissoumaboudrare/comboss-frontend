@@ -26,6 +26,9 @@ import { Input } from "@/components/ui/input";
 import { CustomIcon } from "@/app/atoms/_components/icons/CustomIcons";
 import { Section } from "@/app/atoms/_components/Section";
 
+import { toast, Bounce } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
+
 const passwordValidation = new RegExp(
   /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
 );
@@ -61,8 +64,30 @@ const Dashboard = () => {
   const handleDeleteAccount = async () => {
     try {
       await fetchAPI(`/api/users/${user?.userID}`, { method: "DELETE" });
+      toast.success("Account deleted successfully!", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        transition: Bounce,
+      });
       router.push("/signin");
     } catch (error) {
+      toast.error("Failed to delete account.", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        transition: Bounce,
+      });
       console.error("Failed to delete account:", error);
     }
   };
@@ -74,8 +99,30 @@ const Dashboard = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(values),
       });
+      toast.success("Password changed successfully!", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        transition: Bounce,
+      });
       passwordForm.reset({ oldPassword: "", newPassword: "" });
     } catch (error) {
+      toast.error("Failed to change password.", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        transition: Bounce,
+      });
       console.error("Failed to change password:", error);
     }
   };
@@ -87,9 +134,31 @@ const Dashboard = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(values),
       });
+      toast.info("Avatar change submitted. Verification in progress.", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        transition: Bounce,
+      });
       setUser({ ...user, avatar: values.avatarUrl });
       avatarForm.reset({ avatarUrl: "" });
     } catch (error) {
+      toast.error("Failed to change avatar.", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        transition: Bounce,
+      });
       console.error("Failed to change avatar:", error);
     }
   };

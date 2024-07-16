@@ -27,6 +27,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { ComboFilters } from "./ComboFilters";
 
+import { toast } from 'react-toastify';
 
 type Combo = {
   comboID: number;
@@ -53,7 +54,7 @@ type CombosListProps = {
 };
 
 export const CombosList = ({ characterID }: CombosListProps) => {
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated} = useAuth();
   const [combos, setCombos] = useState<Combo[]>([]);
   const [selectedVideoUrl, setSelectedVideoUrl] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -62,8 +63,6 @@ export const CombosList = ({ characterID }: CombosListProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const filter = searchParams.get('filter') || 'latest';
-
-  console.log("video", combos);
 
   useEffect(() => {
     const fetchCombos = async () => {
@@ -84,11 +83,11 @@ export const CombosList = ({ characterID }: CombosListProps) => {
     };
 
     fetchCombos();
-    const interval = setInterval(() => {
-      fetchCombos();
-    }, 2000);
+    // const interval = setInterval(() => {
+    //   fetchCombos();
+    // }, 2000);
 
-    return () => clearInterval(interval);
+    // return () => clearInterval(interval);
   }, [characterID, isAuthenticated]);
 
   useEffect(() => {
@@ -135,9 +134,27 @@ export const CombosList = ({ characterID }: CombosListProps) => {
   };
 
   const handleToggleLike = async (comboID: number, isLiked: boolean) => {
+
+    if (!isAuthenticated) {
+      toast.info("Hey there! You need to sign in to like a combo. Join us and start liking!", {
+        position: "top-center",
+        autoClose: 10000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      router.push("/login");
+      return;
+    }
+
     try {
       const method = isLiked ? "DELETE" : "POST";
       await fetchAPI(`/api/likes/${comboID}`, { method });
+      const updatedCombo = await fetchAPI(`/api/combos/character/${characterID}`, { method: "GET" });
+      setCombos(updatedCombo);
     } catch (error) {
       console.error("Error toggling like:", error);
     }
@@ -249,6 +266,7 @@ export const CombosList = ({ characterID }: CombosListProps) => {
             <CardFooter className="flex p-2">
               <div className="flex items-center w-full justify-between">
                 <div className="flex gap-2">
+                {isAuthenticated && (
                   <Button
                     variant={combo.isFavorite ? "default" : "outline"}
                     className="size-8 p-0 group"
@@ -262,7 +280,7 @@ export const CombosList = ({ characterID }: CombosListProps) => {
                       size={24}
                       fill={combo.isFavorite ? "yellow" : "gray"}
                     />
-                  </Button>
+                  </Button>)}
                   {combo.videoURL && (
                     <Dialog>
                       <DialogTrigger asChild>

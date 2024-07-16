@@ -76,12 +76,19 @@ const config = {
           from: { backgroundPosition: "left" },
           to: { backgroundPosition: "right" },
         },
+        "infinite-scroll": {
+          from: { transform: "translateX(0)" },
+          to: { transform: "translateX(-100%)" },
+        },
       },
       animation: {
         "stars-spin-slow": "spin 3s linear infinite",
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         like: "like 0.8s steps(28)",
+        slide:
+          "slide calc(var(--card-number) * var(--card-speed)) linear infinite",
+        "infinite-scroll": "infinite-scroll 35s linear infinite",
       },
     },
   },

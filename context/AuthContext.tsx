@@ -10,8 +10,10 @@ type User = {
 
 type AuthContextType = {
   isAuthenticated: boolean;
+  isLoading: boolean;
   user: User | null;
   setIsAuthenticated: (isAuthenticated: boolean) => void;
+  setIsLoading: (isLoading: boolean) => void;
   setUser: (user: User | null) => void;
   checkAuthStatus: () => void;
 };
@@ -20,6 +22,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true); 
   const [user, setUser] = useState<User | null>(null);
 
   const fetchUser = async (userId: number) => {
@@ -39,7 +42,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         method: "GET",
       });
       setIsAuthenticated(response.isAuthenticated);
-      console.log({isUserConnected: response.isAuthenticated})
+      //console.log({isUserConnected: response.isAuthenticated})
       if (response.isAuthenticated) {
         await fetchUser(response.id);
       } else {
@@ -47,6 +50,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
     } catch (error) {
       console.error("Failed to check authentication status 😢:", error);
+    } finally {
+      setIsLoading(false);
     }
   }, []);
 
@@ -57,7 +62,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, [checkAuthStatus]);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, setIsAuthenticated, setUser, checkAuthStatus }}>
+    <AuthContext.Provider value={{ isAuthenticated, isLoading, setIsLoading, user, setIsAuthenticated, setUser, checkAuthStatus }}>
       {children}
     </AuthContext.Provider>
   );

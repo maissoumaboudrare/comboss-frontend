@@ -1,11 +1,16 @@
 "use client";
+import { useAuth } from "@/context/AuthContext";
 import { Section } from "@/app/atoms/_components/Section";
 import { CustomIcon } from "@/app/atoms/_components/icons/CustomIcons";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import GuestsAvatar from "@/app/atoms/_components/GuestsAvatar"
+import SliderHero from "@/app/atoms/_components/SliderHero"
+
 
 export const Hero = () => {
+  const { isAuthenticated, isLoading} = useAuth();
   return (
     <Section className="flex max-md:flex-col items-center">
       <div className="flex flex-col justify-center items-center gap-4">
@@ -28,24 +33,26 @@ export const Hero = () => {
           on Street Fighter 6. Discover, share, and vote for the best combos
           with an active and passionate community. Become the boss of combos!
         </p>
-
-        <div className="flex relative">
-        
-        <Link
-                href={"/signin"}
-                className={cn(
-                  buttonVariants({ variant: "default" }),
-                  "text-sm rounded-full px-6 py-4 z-10"
-                )}
-              >
-          Join us <CustomIcon
-                  className="inline-block text-foreground ml-2"
-                  name="signin"
-                  size={20}
-                  fill="#fff"
-                /></Link>
-                <span className="animate-ping absolute inline-flex top-[12%] left-[15%] h-[75%] w-[87px] rounded-full bg-primary opacity-75 z-0"></span>
-        </div>
+        <GuestsAvatar userIds={[1, 2, 3]} />
+        {!isLoading && !isAuthenticated && (
+          <div className="flex relative">
+            <Link
+              href={"/signin"}
+              className={cn(
+                buttonVariants({ variant: "default" }),
+                "text-sm rounded-full px-6 py-4 z-10"
+              )}
+            >
+              Join us <CustomIcon
+                className="inline-block text-foreground ml-2"
+                name="signin"
+                size={20}
+                fill="#fff"
+              />
+            </Link>
+            <span className="animate-ping absolute inline-flex top-[12%] left-[15%] h-[75%] w-[87px] rounded-full bg-primary opacity-75 z-0"></span>
+          </div>
+        )}
       </div>
     </Section>
   );

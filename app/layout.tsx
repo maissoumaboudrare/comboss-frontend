@@ -9,6 +9,9 @@ import { Header } from "./molecules/_components/Header";
 import { AuthProvider } from "@/context/AuthContext";
 import { Footer } from "./molecules/_components/Footer";
 
+import {ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
+
 const poppins = Poppins({
   subsets: ["latin"],
   weight: "400",
@@ -35,6 +38,7 @@ export default function RootLayout({
           "font-sans h-full bg-background text-foreground"
         )}
       >
+        <ToastContainer />
         <AuthProvider>
           <div className="flex flex-col min-h-screen">
             <Header />

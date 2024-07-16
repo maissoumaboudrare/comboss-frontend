@@ -24,6 +24,9 @@ import { ComboArea } from "./forms/ComboArea";
 import { ComboPreview } from "./forms/ComboPreview";
 import { Input } from "@/components/ui/input";
 
+import { toast, Bounce } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
+
 const comboSchema = z.object({
   comboName: z
     .string()
@@ -188,13 +191,31 @@ export function AddCombo() {
         credentials: "include",
       });
 
-      alert("Combo added successfully!");
+      toast.success("Combo added successfully!", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        transition: Bounce,
+        });
       reset();
       setIsOpen(false);
-      // router.push(
-      //   `${process.env.NEXT_PUBLIC_FRONT_BASE_URL}/character/${data.characterID}`
-      // );
     } catch (error) {
+      toast.error('Error adding combo!', {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        transition: Bounce,
+        });
       console.error("Error adding combo:", error);
     }
   };
@@ -212,6 +233,7 @@ export function AddCombo() {
             size={24}
           />
         </Button>
+        
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px] max-h-[80vh] overflow-y-auto scrollbar-thin scrollbar-thumb-primary scrollbar-track-muted scrollbar-thumb-rounded scrollbar-track-rounded">
         <DialogHeader>
