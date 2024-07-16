@@ -51,8 +51,7 @@ Combosss is a web app that serves as a hub for versus fighting game enthusiasts 
 - **User Dashboard**: Manage and favorite combos.
 
 ## Screenshots
-SOON ! 🏋️‍♂️
-<!-- Include screenshots if available -->
+![Comboss 🔥 Homepage](https://github.com/maissoumaboudrare/comboss-frontend/blob/main/public/assets/others/screenshot-comboss.png)
 
 ## Setup
 To run Combosss locally, you'll need to have Node.js and PostgreSQL installed on your machine. Clone the repository and install the dependencies using npm or yarn:

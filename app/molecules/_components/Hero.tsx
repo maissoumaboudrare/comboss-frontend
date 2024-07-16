@@ -24,7 +24,7 @@ export const Hero = () => {
           </span>
         </div>
 
-        <h2 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-4xl mt-10">
+        <h2 className="scroll-m-20 text-4xl text-center font-extrabold tracking-tight lg:text-4xl mt-10">
           Welcome to the best app ever !
         </h2>
 

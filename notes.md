@@ -13,8 +13,7 @@ RENAME CharactersSelect.tsx TO CharactersSelectbox.tsx
       |- page.tsx
 
 - feature flag avec une variable .env
-- Avatar validation manuelle blocage aprobation
-- [X] AddCombo éviter la redirection brutale
-- [X] Trash icon right
-- [X] ComboList ajouter (isLoading) loader spinner au fetch de la data
-- [X] filtre utiliser l'url pour les onglets et non les states
+- **!** Responsiv design single page character
+- Characters Galery ajouter (isLoading) loader spinner au fetch de la data
+- Characters Galery vérifier pourquoi ne se charge pas à l'affichage de la page
+- **!** AddCombo fetch data ComboList dès l'envoie du combo au clique (submit) MAJ
