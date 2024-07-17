@@ -5,7 +5,11 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'raw.githubusercontent.com'
-      }
+      },
+      {
+        protocol: 'https',
+        hostname: 'media3.giphy.com'
+      },
     ]
   }
 };

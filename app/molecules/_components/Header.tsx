@@ -1,25 +1,19 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { Section } from "@/app/atoms/_components/Section";
+import { Section } from "@/app/atoms/_components/commons/Section";
 import { CustomIcon } from "@/app/atoms/_components/icons/CustomIcons";
 import { Button, buttonVariants } from "@/components/ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { cn, fetchAPI } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
-import { AddCombo } from "@/app/atoms/_components/AddCombo";
+import { AddComboForm } from "./AddComboForm";
 
 import { useAuth } from "@/context/AuthContext";
 import { AnimatedTooltip } from "@/components/ui/animated-tooltip";
+import { toast } from "react-toastify";
 
 export const Header = () => {
-  const { isAuthenticated, user, setIsAuthenticated, checkAuthStatus } =
-    useAuth();
+  const { isAuthenticated, user, setIsAuthenticated } = useAuth();
   const router = useRouter();
 
   const handleLogout = async () => {
@@ -34,39 +28,22 @@ export const Header = () => {
       router.push("/");
     } catch (error) {
       console.error("Failed to logout:", error);
+      toast.error("Failed to logout. Please try again.", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
     }
   };
 
   return (
     <header className="sticky top-0 mb-4 py-4 backdrop-blur-sm backdrop-grayscale z-30">
       <Section className="flex items-center">
-        {/* <TooltipProvider>
-      <Tooltip>
-        <TooltipTrigger asChild>
-        <Link href={"/"}>
-          <h1 className="text-md font-bold items-center gap-1 flex">
-            Combosss
-            <span>
-              <CustomIcon
-                size={20}
-                fill="yellow"
-                stroke="none"
-                name="flameLogo"
-                className="-rotate-90"
-              />
-            </span>
-          </h1>
-        </Link>
-        </TooltipTrigger>
-        <TooltipContent>
-        <CustomIcon
-                size={25}
-                fill="white"
-                name="home"
-              />
-        </TooltipContent>
-      </Tooltip>
-    </TooltipProvider> */}
         <AnimatedTooltip
           trigger={
             <Link href={"/"}>
@@ -124,7 +101,7 @@ export const Header = () => {
             </>
           ) : (
             <>
-              <AddCombo />
+              <AddComboForm />
               <AnimatedTooltip
                 trigger={
                   <Link href={"/dashboard"}>

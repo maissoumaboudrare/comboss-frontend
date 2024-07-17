@@ -7,6 +7,7 @@ import { GeistMono } from "geist/font/mono";
 import { Header } from "./molecules/_components/Header";
 
 import { AuthProvider } from "@/context/AuthContext";
+import { CombosProvider } from "@/context/ComboContext";
 import { Footer } from "./molecules/_components/Footer";
 
 import {ToastContainer} from 'react-toastify';
@@ -19,7 +20,7 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "🔥 Combosss by maïssoum",
+  title: "🔥 Comboss by maïssoum",
   description: "Join the best app of sharing combo.",
 };
 
@@ -40,11 +41,13 @@ export default function RootLayout({
       >
         <ToastContainer />
         <AuthProvider>
+        <CombosProvider>
           <div className="flex flex-col min-h-screen">
             <Header />
             {children}
             <Footer />
           </div>
+          </CombosProvider>
         </AuthProvider>
       </body>
     </html>

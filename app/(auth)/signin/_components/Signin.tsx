@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { useRouter } from "next/navigation";
@@ -29,6 +28,7 @@ import z from "zod";
 import { fetchAPI } from "@/lib/utils";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 const passwordValidation = new RegExp(
   /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
@@ -90,8 +90,6 @@ const Signin = () => {
 
   const [avatars, setAvatars] = useState<string[]>([]);
   const router = useRouter();
-
-    
 
   useEffect(() => {
     const fetchAvatars = async () => {
@@ -219,12 +217,23 @@ const Signin = () => {
                   <FormLabel>Select an Avatar</FormLabel>
                   <div className="flex flex-wrap gap-2 items-center">
                     {avatars.map((thumbnail, index) => (
-                      <div key={index} className={`overflow-hidden w-11 h-11 rounded-lg cursor-pointer transition duration-300 ease-in-out hover:border-2 hover:border-primary hover:rotate-6 ${field.value === thumbnail ? "w-9 h-9 border-4 border-mute grayscale rotate-12" : ""}`}>
-                        <img
+                      <div
+                        key={index}
+                        className={`overflow-hidden w-11 h-11 rounded-lg cursor-pointer transition duration-300 ease-in-out hover:border-2 hover:border-primary hover:rotate-6 ${
+                          field.value === thumbnail
+                            ? "w-9 h-9 border-4 border-mute grayscale rotate-12"
+                            : ""
+                        }`}
+                      >
+                        <Image
                           src={thumbnail}
                           alt={`Avatar ${index}`}
-                          className={"cursor-pointer object-cover w-full h-full"}
+                          className={
+                            "cursor-pointer object-cover w-full h-full"
+                          }
                           onClick={() => field.onChange(thumbnail)}
+                          width={44}
+                          height={44}
                         />
                       </div>
                     ))}

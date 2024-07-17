@@ -1,50 +1,51 @@
-/* eslint-disable @next/next/no-img-element */
 "use client"
+
+import Image from "next/image";
 
 const SliderHero = () => {
   const charactersGifs = [
     {
-      src: "./assets/slider/chunli.webp",
+      src: "/assets/slider/chunli.webp",
       alt: "Chun-li",
     },
     {
-      src: "./assets/slider/guile.webp",
+      src: "/assets/slider/guile.webp",
       alt: "Guile",
     },
     {
-      src: "./assets/slider/ken.webp",
+      src: "/assets/slider/ken.webp",
       alt: "Ken",
     },
     {
-      src: "./assets/slider/marisa.webp",
+      src: "/assets/slider/marisa.webp",
       alt: "Marisa",
     },
     {
-      src: "./assets/slider/akuma.webp",
+      src: "/assets/slider/akuma.webp",
       alt: "Akuma",
     },
     {
-      src: "./assets/slider/blanka.webp",
+      src: "/assets/slider/blanka.webp",
       alt: "Blanka",
     },
     {
-      src: "./assets/slider/juri.webp",
+      src: "/assets/slider/juri.webp",
       alt: "Juri",
     },
     {
-      src: "./assets/slider/zangief.webp",
+      src: "/assets/slider/zangief.webp",
       alt: "Zangief",
     },
     {
-      src: "./assets/slider/kimberly.webp",
+      src: "/assets/slider/kimberly.webp",
       alt: "Kimberly",
     },
     {
-      src: "./assets/slider/aki.webp",
+      src: "/assets/slider/aki.webp",
       alt: "A.K.I",
     },
     {
-      src: "./assets/slider/ryu.webp",
+      src: "/assets/slider/ryu.webp",
       alt: "Ryu",
     },
   ];
@@ -55,12 +56,15 @@ const SliderHero = () => {
         {charactersGifs.map((logo, index) => (
           <li
             key={index}
-            className="overflow-hidden w-[150px] h-[200px] aspect-card rounded-[32px] transition duration-300 ease-in-out hover:scale-110 hover:rotate-6"
+            className="overflow-hidden w-[150px] h-[200px] aspect-card rounded-[32px] transition duration-300 ease-in-out hover:scale-110 hover:-rotate-6"
           >
-            <img
+            <Image
               className="object-cover w-full h-full"
               src={logo.src}
               alt={logo.alt}
+              width={150}
+              height={200}
+              unoptimized
             />
           </li>
         ))}
@@ -72,12 +76,15 @@ const SliderHero = () => {
         {charactersGifs.map((logo, index) => (
           <li
             key={index}
-            className="overflow-hidden w-[150px] h-[200px] aspect-card rounded-[32px] transition duration-300 ease-in-out hover:scale-110 hover:rotate-6"
+            className="overflow-hidden w-[150px] h-[200px] aspect-card rounded-[32px] transition duration-300 ease-in-out hover:scale-110 hover:-rotate-6"
           >
-            <img
+            <Image
               className="object-cover w-full h-full"
               src={logo.src}
               alt={logo.alt}
+              width={150}
+              height={200}
+              unoptimized
             />
           </li>
         ))}

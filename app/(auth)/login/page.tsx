@@ -1,4 +1,4 @@
-import { Section } from "@/app/atoms/_components/Section";
+import { Section } from "@/app/atoms/_components/commons/Section";
 import Login from "./_components/Login";
 
 export default function LoginPage() {

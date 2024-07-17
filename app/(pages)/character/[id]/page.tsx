@@ -1,7 +1,7 @@
 import { Separator } from "@/components/ui/separator";
-import { CharacterInfos } from "@/app/atoms/_components/CharacterInfos";
-import { CombosList } from "@/app/atoms/_components/CombosList";
-import { Section } from "@/app/atoms/_components/Section";
+import { CharacterInfos } from "@/app/atoms/_components/character/CharacterInfos";
+import { Combos } from "@/app/molecules/_components/Combos";
+import { Section } from "@/app/atoms/_components/commons/Section";
 import { fetchAPI } from "@/lib/utils";
 
 type Character = {
@@ -39,7 +39,7 @@ const Character = async ({ params }: { params: { id: string } }) => {
 
           <Separator orientation="vertical" />
 
-          <CombosList characterID={character.characterID} />
+          <Combos characterID={character.characterID} />
         </Section>
       </main>
     );

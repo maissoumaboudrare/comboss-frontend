@@ -1,53 +1,45 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 import { useEffect, useState } from "react";
-import { CharacterCard } from "@/app/atoms/_components/CharacterCard";
-import { Section } from "@/app/atoms/_components/Section";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { fetchAPI } from "@/lib/utils";
-
-type Character = {
-  characterID: number;
-  name: string;
-  thumbnail: string;
-};
+import { CharacterCard } from "@/app/atoms/_components/character/CharacterCard";
+import { Section } from "@/app/atoms/_components/commons/Section";
+import { fetchCharacters } from "@/utils/api";
+import { Character } from "@/types/character";
 
 export const Characters = () => {
   const [characters, setCharacters] = useState<Character[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const fetchCharacters = async () => {
+    const loadCharacters = async () => {
       try {
-        const response = await fetchAPI("/api/characters", {
-          method: "GET",
-        });
-
-        setCharacters(response);
+        const data = await fetchCharacters();
+        setCharacters(data);
       } catch (error) {
         console.error("Error fetching characters:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
-    fetchCharacters();
+    loadCharacters();
   }, []);
 
   return (
     <Section className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-      {characters.map((character) => (
-        <CharacterCard
-          key={character.characterID}
-          id={character.characterID}
-          name={character.name}
-          src={character.thumbnail}
-        />
-      ))}
+      {isLoading ? (
+        <div className="flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
+        </div>
+      ) : (
+        characters.map((character) => (
+          <CharacterCard
+            key={character.characterID}
+            id={character.characterID}
+            name={character.name}
+            src={character.thumbnail}
+          />
+        ))
+      )}
     </Section>
   );
 };

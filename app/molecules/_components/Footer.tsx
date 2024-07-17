@@ -1,7 +1,6 @@
-"use client"
+"use client";
 
-import { Section } from "@/app/atoms/_components/Section";
-
+import { Section } from "@/app/atoms/_components/commons/Section";
 
 export const Footer = () => {
   return (

@@ -1,13 +1,8 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
-import { useState, useEffect } from "react";
-import { fetchAPI } from "@/lib/utils";
-
-type User = {
-  userID: number;
-  pseudo: string;
-  avatar: string;
-};
+import { useState, useEffect, useCallback } from "react";
+import Image from 'next/image';
+import { fetchUsers } from "@/utils/api";
+import { User } from "@/types/user";
 
 type GuestsAvatarProps = {
   userIds: number[];
@@ -16,29 +11,29 @@ type GuestsAvatarProps = {
 const GuestsAvatar = ({ userIds }: GuestsAvatarProps) => {
   const [users, setUsers] = useState<User[]>([]);
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await fetchAPI("/api/users", { method: "GET" });
-        const filteredUsers = response.filter((user: User) =>
-          userIds.includes(user.userID)
-        );
-        setUsers(filteredUsers.slice(0, 6));
-      } catch (error) {
-        console.error("Error fetching users:", error);
-      }
-    };
-
-    fetchUsers();
+  const loadUsers = useCallback(async () => {
+    try {
+      const data = await fetchUsers();
+      const filteredUsers = data.filter((user: User) =>
+        userIds.includes(user.userID)
+      );
+      setUsers(filteredUsers.slice(0, 6));
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
   }, [userIds]);
+
+  useEffect(() => {
+    loadUsers();
+  }, [loadUsers]);
 
   return (
     <div className="flex flex-row items-center justify-center mb-10 w-full">
       {users.map((user) => (
         <div key={user.userID} className="relative group -mr-4">
-          <img
-            height={100}
-            width={100}
+          <Image
+            height={48}
+            width={48}
             src={user.avatar}
             alt={user.pseudo}
             className="object-cover rounded-full h-12 w-12 border-2 border-white transition duration-500 group-hover:scale-105 group-hover:z-30"
@@ -49,4 +44,4 @@ const GuestsAvatar = ({ userIds }: GuestsAvatarProps) => {
   );
 }
 
-export default GuestsAvatar
+export default GuestsAvatar;
