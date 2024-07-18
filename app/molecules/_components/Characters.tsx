@@ -27,9 +27,9 @@ export const Characters = () => {
   return (
     <Section className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
       {isLoading ? (
-        <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
-        </div>
+        <div className="col-span-full flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
+      </div>
       ) : (
         characters.map((character) => (
           <CharacterCard

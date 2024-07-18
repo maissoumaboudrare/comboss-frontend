@@ -31,20 +31,21 @@ export const Combos = ({ characterID }: CombosListProps) => {
   const searchParams = useSearchParams();
   const filter = searchParams.get("filter") || "latest";
 
-  const loadCombos = useCallback(async () => {
-    try {
-      const data = await fetchCombos(characterID);
-      updateCombos(data);
-    } catch (error) {
-      console.error("Error fetching combos:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [characterID, updateCombos]);
-
   useEffect(() => {
-    loadCombos();
-  }, [characterID, isAuthenticated, loadCombos]);
+    const loadCombos = async () => {
+      try {
+        const data = await fetchCombos(characterID);
+        updateCombos(data);
+      } catch (error) {
+        console.error("Error fetching combos:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    loadCombos()
+  }, [characterID, isAuthenticated])
+
+
 
   useEffect(() => {
     if (!searchParams) return;
@@ -123,7 +124,7 @@ export const Combos = ({ characterID }: CombosListProps) => {
         "Hey there! You need to sign in to like a combo. Join us and start liking!",
         {
           position: "top-center",
-          autoClose: 10000,
+          autoClose: 6000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
@@ -135,12 +136,11 @@ export const Combos = ({ characterID }: CombosListProps) => {
       router.push("/login");
       return;
     }
-
-    try {
+     try {
       const method = isLiked ? "DELETE" : "POST";
       await toggleLike(comboID, method);
       const updatedCombo = await fetchCombos(characterID);
-      updatedCombo(updatedCombo);
+      updateCombos(updatedCombo);
     } catch (error) {
       console.error("Error toggling like:", error);
     }

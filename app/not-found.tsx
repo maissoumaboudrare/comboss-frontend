@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 const Custom404 = () => {
   useEffect(() => {
     const audio = new Audio('./assets/others/404.mp3');
-    audio.volume = 0.05;
+    audio.volume = 0.1;
     audio.play();
   }, []);
 
@@ -17,7 +17,7 @@ const Custom404 = () => {
         alt="Lost Fighter"
         layout="fill"
         objectFit="cover"
-        className="absolute inset-0 w-full h-full object-cover opacity-50"
+        className="absolute inset-0 w-full h-full"
       />
       <div className="relative z-10 max-w-lg mx-auto bg-black bg-opacity-50 p-8 rounded-md">
         <h1 className="text-6xl font-extrabold mb-8">404</h1>

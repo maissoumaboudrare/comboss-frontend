@@ -26,7 +26,6 @@ import { Input } from "@/components/ui/input";
 import { CustomIcon } from "@/app/atoms/_components/icons/CustomIcons";
 
 import { toast, Bounce } from "react-toastify";
-import "react-toastify/dist/ReactToastify.min.css";
 import { changeAvatar, changePassword, deleteUser } from "@/utils/api";
 
 const passwordValidation = new RegExp(

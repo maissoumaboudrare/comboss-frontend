@@ -25,7 +25,6 @@ import { ComboPreview } from "../../atoms/_components/AddComboFormItems/ComboPre
 import { Input } from "@/components/ui/input";
 
 import { toast, Bounce } from "react-toastify";
-import "react-toastify/dist/ReactToastify.min.css";
 import { useCombos } from "@/context/ComboContext";
 import { Character } from "@/types/character";
 import { addCombo, fetchCharacters } from "@/utils/api";

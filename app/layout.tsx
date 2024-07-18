@@ -10,8 +10,8 @@ import { AuthProvider } from "@/context/AuthContext";
 import { CombosProvider } from "@/context/ComboContext";
 import { Footer } from "./molecules/_components/Footer";
 
-import {ToastContainer} from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.min.css';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.min.css";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -41,12 +41,12 @@ export default function RootLayout({
       >
         <ToastContainer />
         <AuthProvider>
-        <CombosProvider>
-          <div className="flex flex-col min-h-screen">
-            <Header />
-            {children}
-            <Footer />
-          </div>
+          <CombosProvider>
+            <div className="flex flex-col min-h-screen">
+              <Header />
+              {children}
+              <Footer />
+            </div>
           </CombosProvider>
         </AuthProvider>
       </body>

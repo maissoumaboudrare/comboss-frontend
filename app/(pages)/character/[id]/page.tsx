@@ -32,12 +32,13 @@ const Character = async ({ params }: { params: { id: string } }) => {
 
     return (
       <main>
-        <Section className="grid grid-cols-[250px_1px_1fr] gap-4">
+        <Section className="grid md:grid-cols-[250px_1px_1fr] gap-4">
           <div className="relative">
             <CharacterInfos character={character} />
           </div>
 
-          <Separator orientation="vertical" />
+          <Separator orientation="vertical" className="hidden md:block"/>
+          <Separator orientation="horizontal" className="block md:hidden my-4" />
 
           <Combos characterID={character.characterID} />
         </Section>
