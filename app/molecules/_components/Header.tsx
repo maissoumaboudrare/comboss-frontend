@@ -11,6 +11,7 @@ import { AddComboForm } from "./AddComboForm";
 import { useAuth } from "@/context/AuthContext";
 import { AnimatedTooltip } from "@/components/ui/animated-tooltip";
 import { toast } from "react-toastify";
+import { IconLegendDialog } from "@/app/atoms/_components/IconLegendDialog";
 
 export const Header = () => {
   const { isAuthenticated, user, setIsAuthenticated } = useAuth();
@@ -102,6 +103,7 @@ export const Header = () => {
           ) : (
             <>
               <AddComboForm />
+              <IconLegendDialog/>
               <AnimatedTooltip
                 trigger={
                   <Link href={"/dashboard"}>

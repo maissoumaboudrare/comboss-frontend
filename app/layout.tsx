@@ -12,6 +12,7 @@ import { Footer } from "./molecules/_components/Footer";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
+import CookieConsent from "./molecules/_components/CookieConsent";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -47,6 +48,7 @@ export default function RootLayout({
               {children}
               <Footer />
             </div>
+            <CookieConsent />
           </CombosProvider>
         </AuthProvider>
       </body>
