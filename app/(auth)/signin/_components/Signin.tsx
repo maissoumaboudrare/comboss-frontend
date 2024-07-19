@@ -29,6 +29,7 @@ import { fetchAPI } from "@/lib/utils";
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 const passwordValidation = new RegExp(
   /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
@@ -130,9 +131,6 @@ const Signin = () => {
     }
   };
 
-  // const handleRedirect = () => {
-  //   console.log("google connect !");
-  // };
   const handleGoogleSignIn = () => {
     window.location.href = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/google`
   };
@@ -274,19 +272,19 @@ const Signin = () => {
 
             <p className="px-8 text-center text-sm text-muted-foreground">
               By clicking continue, you agree to our{" "}
-              <a
-                href="/"
+              <Link
+                href="/legal-notice"
                 className="underline underline-offset-4 hover:text-primary"
               >
                 Terms of Service
-              </a>{" "}
+              </Link>{" "}
               and{" "}
-              <a
-                href="/"
+              <Link
+                href="/legal-notice"
                 className="underline underline-offset-4 hover:text-primary"
               >
                 Privacy Policy
-              </a>
+              </Link>
               .
             </p>
           </CardFooter>
