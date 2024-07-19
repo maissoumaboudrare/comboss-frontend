@@ -19,7 +19,7 @@ export const Hero = () => {
       <div className="flex flex-col justify-center items-center gap-4">
         <div className="max-w-sm text-center bg-primary rounded-full px-5 py-2 ">
           <span className="animate-stars-spin-slow inline-block">⭐</span> Over
-          100 users on Combosss{" "}
+          100 users on Comboss{" "}
           <span className="animate-stars-spin-slow inline-block">⭐</span>
         </div>
 

@@ -130,8 +130,11 @@ const Signin = () => {
     }
   };
 
-  const handleRedirect = () => {
-    console.log("google connect !");
+  // const handleRedirect = () => {
+  //   console.log("google connect !");
+  // };
+  const handleGoogleSignIn = () => {
+    window.location.href = 'http://localhost:3010/api/auth/google';
   };
 
   return (
@@ -263,7 +266,7 @@ const Signin = () => {
             <Button
               className="py-5 w-full gap-2"
               variant={"outline"}
-              onClick={handleRedirect}
+              onClick={handleGoogleSignIn}
             >
               <CustomIcon name="gmail" size={20} /> Signin with your Google
               address

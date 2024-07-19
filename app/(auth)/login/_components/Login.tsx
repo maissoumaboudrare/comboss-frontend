@@ -27,6 +27,7 @@ import { fetchAPI } from "@/lib/utils";
 
 import { useAuth } from "@/context/AuthContext";
 import { Bounce, toast } from 'react-toastify';
+import { CustomIcon } from "@/app/atoms/_components/icons/CustomIcons";
 
 
 const LoginSchema = z.object({
@@ -89,6 +90,9 @@ const Login = () => {
     }
   };
 
+  const handleGoogleSignIn = () => {
+    window.location.href = 'http://localhost:3010/api/auth/google';
+  };
 
   return (
     <Form {...form}>
@@ -130,8 +134,26 @@ const Login = () => {
               )}
             />
           </CardContent>
-          <CardFooter>
-            <Button type="submit">Login</Button>
+          <CardFooter className="flex flex-col gap-8">
+            <Button type="submit"  className="w-full">Login</Button>
+            <div className="relative w-full">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t"></span>
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-background px-2 text-muted-foreground">
+                  Or continue with
+                </span>
+              </div>
+            </div>
+            <Button
+              className="py-5 w-full gap-2"
+              variant={"outline"}
+              onClick={handleGoogleSignIn}
+            >
+              <CustomIcon name="gmail" size={20} /> Signin with your Google
+              address
+            </Button>
           </CardFooter>
         </Card>
       </form>

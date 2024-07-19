@@ -28,7 +28,8 @@ const GuestsAvatar = ({ userIds }: GuestsAvatarProps) => {
   }, [loadUsers]);
 
   return (
-    <div className="flex items-center justify-center mb-10 w-full">
+    <div className="flex items-center justify-center mb-10 w-full pr-2">
+      <div className="flex items-center">
       {users.map((user) => (
         <div key={user.userID} className="relative group -mr-4">
           <Image
@@ -40,6 +41,7 @@ const GuestsAvatar = ({ userIds }: GuestsAvatarProps) => {
           />
         </div>
       ))}
+      </div>
     </div>
   );
 }
