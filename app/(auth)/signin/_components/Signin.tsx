@@ -134,7 +134,7 @@ const Signin = () => {
   //   console.log("google connect !");
   // };
   const handleGoogleSignIn = () => {
-    window.location.href = 'http://localhost:3010/api/auth/google';
+    window.location.href = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/google`
   };
 
   return (
