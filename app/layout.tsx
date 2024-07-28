@@ -21,9 +21,24 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "🔥 Comboss by maïssoum",
-  description: "Join the best app of sharing combo.",
+  metadataBase: new URL(`${process.env.NEXT_PUBLIC_FRONT_BASE_URL}`),
+  title: {
+    default: "🔥 Comboss",
+    template: '%s | 🔥 Comboss',
+  },
+  description:
+    "Join the best app of sharing combo.",
+  openGraph: {
+    title: "🔥 Comboss",
+    description:
+    "Join the best app of sharing combo.",
+    type: "website",
+    locale: "en_US",
+    url: `${process.env.NEXT_PUBLIC_FRONT_BASE_URL}`,
+    siteName: "Comboss"
+  }
 };
+
 
 export default function RootLayout({
   children,
