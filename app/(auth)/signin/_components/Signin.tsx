@@ -53,7 +53,6 @@ const SigninSchema = z
         message:
           "Password not valid! Add at least one uppercase letter, one lowercase letter, one number and one special character",
       }),
-
     confirmPassword: z
       .string()
       .min(8, "Password requires at least 8 characters !"),

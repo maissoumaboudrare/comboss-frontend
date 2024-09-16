@@ -42,7 +42,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         method: "GET",
       });
       setIsAuthenticated(response.isAuthenticated);
-      //console.log({isUserConnected: response.isAuthenticated})
       if (response.isAuthenticated) {
         await fetchUser(response.id);
       } else {

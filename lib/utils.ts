@@ -11,6 +11,8 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+// TODO move to utils/api.ts 👇
+
 /**
  * Fetches data from the API with provided endpoint and options.
  * 

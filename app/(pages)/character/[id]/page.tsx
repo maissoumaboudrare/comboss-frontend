@@ -11,7 +11,6 @@ type Character = {
   name: string;
   avatar: string;
   story: string;
-
   vitality: number;
   type: string;
   effectiveRange: string;
@@ -22,9 +21,9 @@ type Character = {
 };
 
 const Character = async ({ params }: { params: { id: string } }) => {
-  console.log("Received params 🔥:", params);
+  // console.log("Received params 🔥:", params);
   const fetchCharacter = async (id: number): Promise<Character> => {
-    console.log("Fetching character with ID 🔥:", id);
+    // console.log("Fetching character with ID 🔥:", id);
     return await fetchAPI(`/api/characters/${id}`, {
       method: "GET",
     });
@@ -32,7 +31,7 @@ const Character = async ({ params }: { params: { id: string } }) => {
 
   try {
     const id = Number(params.id);
-    console.log("Parsed ID 🔥:", id);
+    // console.log("Parsed ID 🔥:", id);
     if (isNaN(id)) {
       throw new Error("Invalid character ID");
     }

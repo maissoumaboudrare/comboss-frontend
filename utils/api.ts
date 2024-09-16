@@ -55,7 +55,7 @@ export const addCombo = async (combo: ComboDataForm) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(combo),
-    credentials: "include",
+    // credentials: "include",
   });
 };
 

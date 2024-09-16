@@ -24,21 +24,18 @@ export const metadata: Metadata = {
   metadataBase: new URL(`${process.env.NEXT_PUBLIC_FRONT_BASE_URL}`),
   title: {
     default: "🔥 Comboss",
-    template: '%s | 🔥 Comboss',
+    template: "%s | 🔥 Comboss",
   },
-  description:
-    "Join the best app of sharing combo.",
+  description: "Join the best app of sharing combo.",
   openGraph: {
     title: "🔥 Comboss",
-    description:
-    "Join the best app of sharing combo.",
+    description: "Join the best app of sharing combo.",
     type: "website",
     locale: "en_US",
     url: `${process.env.NEXT_PUBLIC_FRONT_BASE_URL}`,
-    siteName: "Comboss"
-  }
+    siteName: "Comboss",
+  },
 };
-
 
 export default function RootLayout({
   children,
